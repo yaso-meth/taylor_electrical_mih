@@ -1,4 +1,7 @@
 mih_minio/
+mih_ai/
+mih_api_hub/
+mih_ui/
 mih_db/
 mih_git/
 mih_nginx/
