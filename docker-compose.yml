@@ -32,6 +32,8 @@ services:
       WORDPRESS_DB_NAME: ${WP_SQL_DB}
     volumes:
       - ./mih_wp/ui:/var/www/html
+    depends_on:
+      - mih-wp-db
     networks:
       - mih-network
   mih-wp-db:
