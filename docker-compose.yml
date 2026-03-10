@@ -24,7 +24,7 @@ services:
     image: wordpress
     restart: always
     ports:
-      - '127.0.0.1:8081:80'
+      - '8081:80'
     environment:
       WORDPRESS_DB_HOST: mih-wp-db
       WORDPRESS_DB_USER: ${WP_SQL_USER}
