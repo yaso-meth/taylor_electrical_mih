@@ -12,7 +12,7 @@ services:
     ports:
       - '80:80'   # Public HTTP
       - '443:443' # Public HTTPS
-      - '81:81'   # Admin Web Port
+      - '127.0.0.1:81:81'   # Admin Web Port
     volumes:
       - ./mih_nginx/data:/data
       - ./mih_nginx/letsencrypt:/etc/letsencrypt
@@ -24,7 +24,7 @@ services:
     image: wordpress
     restart: always
     ports:
-      - '8081:80'
+      - '127.0.0.1:8081:80'
     environment:
       WORDPRESS_DB_HOST: mih-wp-db
       WORDPRESS_DB_USER: ${WP_SQL_USER}
@@ -54,7 +54,7 @@ services:
     container_name: mih-monitor
     image: portainer/portainer-ce:2.20.3
     ports:
-      - '9444:9443'
+      - '127.0.0.1:9444:9443'
     volumes:
       - ./mih_monitor/data:/data
       - /var/run/docker.sock:/var/run/docker.sock
