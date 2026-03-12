@@ -12,7 +12,7 @@ services:
     ports:
       - '80:80'   # Public HTTP
       - '443:443' # Public HTTPS
-      - '127.0.0.1:81:81'   # Admin Web Port
+      - '81:81'   # Admin Web Port
     volumes:
       - ./mih_nginx/data:/data
       - ./mih_nginx/letsencrypt:/etc/letsencrypt
@@ -54,7 +54,7 @@ services:
     container_name: mih-monitor
     image: portainer/portainer-ce:2.20.3
     ports:
-      - '127.0.0.1:9444:9443'
+      - '9444:9443'
     volumes:
       - ./mih_monitor/data:/data
       - /var/run/docker.sock:/var/run/docker.sock
