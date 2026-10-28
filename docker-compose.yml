@@ -2,59 +2,55 @@
 networks:
   mih-network:
     driver: bridge
+
 #============== MIH Containers ====================================================================
 services:
-  #============== Nginx Proxy Manager ====================================================================  
+  #============== Nginx Proxy Manager ====================================================================
   mih-nginx:
     container_name: mih-nginx
-    image: 'jc21/nginx-proxy-manager:latest'
+    image: "jc21/nginx-proxy-manager:latest"
     restart: unless-stopped
     ports:
-      - '80:80'   # Public HTTP
-      - '443:443' # Public HTTPS
-      - '127.0.0.1:81:81'   # Admin Web Port
+      - "80:80" # Public HTTP
+      - "443:443" # Public HTTPS
+      - "127.0.0.1:81:81" # Admin Web Port
     volumes:
       - ./mih_nginx/data:/data
       - ./mih_nginx/letsencrypt:/etc/letsencrypt
     networks:
       - mih-network
-  #============== MIH WordPress ====================================================================
-  mih-wordpress:
-    container_name: mih-wordpress
-    image: wordpress
-    restart: always
+
+  #============== MIH HTML Website ====================================================================
+  mih-web:
+    container_name: mih-web
+    image: nginx:alpine
+    restart: unless-stopped
     ports:
-      - '127.0.0.1:8081:80'
-    environment:
-      WORDPRESS_DB_HOST: mih-wp-db
-      WORDPRESS_DB_USER: ${WP_SQL_USER}
-      WORDPRESS_DB_PASSWORD: ${WP_SQL_USER_PW}
-      WORDPRESS_DB_NAME: ${WP_SQL_DB}
+      - "127.0.0.1:8080:80"
     volumes:
-      - ./mih_wp/ui:/var/www/html
-    depends_on:
-      - mih-wp-db
+      - ./taylor_electrical_website:/usr/share/nginx/html
     networks:
       - mih-network
-  mih-wp-db:
-    container_name: mih-wp-db
-    image: mariadb:10.11
-    restart: always
-    environment:
-      MARIADB_DATABASE: ${WP_SQL_DB}
-      MARIADB_USER: ${WP_SQL_USER}
-      MARIADB_PASSWORD: ${WP_SQL_USER_PW}
-      MARIADB_RANDOM_ROOT_PASSWORD: '1'
+
+  #============== MIH File Browser ====================================================================
+  mih-filebrowser:
+    container_name: mih-filebrowser
+    image: filebrowser/filebrowser:v2.30.0
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8081:80"
     volumes:
-      - ./mih_wp/database:/var/lib/mysql
+      - ./taylor_electrical_website:/srv
+      - ./mih_filebrowser/filebrowser.db:/database.db
     networks:
       - mih-network
-  #============== MIH-Monitor Portainer ==================================================================== 
+
+  #============== MIH-Monitor Portainer ====================================================================
   mih-monitor:
     container_name: mih-monitor
     image: portainer/portainer-ce:2.20.3
     ports:
-      - '127.0.0.1:9444:9443'
+      - "127.0.0.1:9444:9443"
     volumes:
       - ./mih_monitor/data:/data
       - /var/run/docker.sock:/var/run/docker.sock
